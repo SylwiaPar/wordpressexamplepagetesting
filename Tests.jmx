@@ -178,6 +178,19 @@ return(&quot;success&quot;);</stringProp>
           <stringProp name="TestPlan.comments">  Login to WordPress</stringProp>
         </GenericController>
         <hashTree>
+          <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="Split multivarialbe parameter" enabled="true">
+            <stringProp name="BeanShellSampler.query">
+import java.util.StringTokenizer;
+
+StringTokenizer st = new StringTokenizer(&quot;${current_value}&quot;,&quot;:&quot;);
+
+vars.put(&quot;user&quot;,st.nextElement());
+vars.put(&quot;pass&quot;,st.nextElement());</stringProp>
+            <stringProp name="BeanShellSampler.filename"></stringProp>
+            <stringProp name="BeanShellSampler.parameters"></stringProp>
+            <boolProp name="BeanShellSampler.resetInterpreter">false</boolProp>
+          </BeanShellSampler>
+          <hashTree/>
           <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="Click Log In" enabled="true">
             <stringProp name="BeanShellSampler.query">
 import org.openqa.selenium.By;
@@ -219,7 +232,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 my_driver = vars.getObject(&quot;DRIVER&quot;);
 
 WebElement emailField = my_driver.findElement(By.id(&quot;usernameOrEmail&quot;));
-emailField.sendKeys(new String[] { &quot;matematyka-podst@wp.pl&quot; });
+emailField.sendKeys(new String[] { &quot;${user}&quot; });
 
 WebElement continueButton = my_driver.findElement(By.xpath(&quot;//div[@id=&apos;primary&apos;]/div/main/div/div[1]/div/form/div[1]/div[2]/button&quot;));
 continueButton.click();
@@ -253,7 +266,7 @@ my_driver = vars.getObject(&quot;DRIVER&quot;);
 
 Thread.sleep(1000);
 WebElement passwordField = my_driver.findElement(By.id(&quot;password&quot;));
-passwordField.sendKeys(new String[] { &quot;jmeterjestcool1&quot; });
+passwordField.sendKeys(new String[] { &quot;${pass}&quot; });
 
 WebElement loginButton = my_driver.findElement(By.xpath(&quot;//div[@id=&apos;primary&apos;]/div/main/div/div[1]/div/form/div[1]/div[2]/button&quot;));
 loginButton.click();
@@ -1061,7 +1074,7 @@ return(&quot;success&quot;);</stringProp>
         <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="Configure the CSV file with tests - dummy read for table headline" enabled="true">
           <stringProp name="delimiter">,</stringProp>
           <stringProp name="fileEncoding"></stringProp>
-          <stringProp name="filename">C:\apache-jmeter-4.0\CSVs\tests.csv</stringProp>
+          <stringProp name="filename">C:\mgrProject\tests.csv</stringProp>
           <boolProp name="ignoreFirstLine">false</boolProp>
           <boolProp name="quotedData">false</boolProp>
           <boolProp name="recycle">true</boolProp>
@@ -1077,7 +1090,7 @@ return(&quot;success&quot;);</stringProp>
           <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="Configure the CSV file with tests" enabled="true">
             <stringProp name="delimiter">,</stringProp>
             <stringProp name="fileEncoding"></stringProp>
-            <stringProp name="filename">C:\apache-jmeter-4.0\CSVs\tests.csv</stringProp>
+            <stringProp name="filename">C:\mgrProject\tests.csv</stringProp>
             <boolProp name="ignoreFirstLine">false</boolProp>
             <boolProp name="quotedData">true</boolProp>
             <boolProp name="recycle">false</boolProp>

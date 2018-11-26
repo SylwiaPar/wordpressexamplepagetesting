@@ -178,7 +178,7 @@ return(&quot;success&quot;);</stringProp>
           <stringProp name="TestPlan.comments">  Login to WordPress</stringProp>
         </GenericController>
         <hashTree>
-          <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="Split multivarialbe parameter" enabled="true">
+          <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="Split multivarialbe parameter: user and password" enabled="true">
             <stringProp name="BeanShellSampler.query">
 import java.util.StringTokenizer;
 
@@ -201,6 +201,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 // Odwołanie się do obiektu z poprzedniego modułu
 my_driver = vars.getObject(&quot;DRIVER&quot;);
 
+Thread.sleep(1000);
 WebElement clickLogIn = my_driver.findElement(By.xpath(&quot;//body[@id=&apos;wpcom-home&apos;]/header/nav/ul[2]/li[1]/a&quot;));
 clickLogIn.click();
 	
@@ -221,7 +222,7 @@ return(&quot;success!&quot;);</stringProp>
             </ResponseAssertion>
             <hashTree/>
           </hashTree>
-          <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="Put the e-mail and click Continue button" enabled="true">
+          <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="Put the e-mail or username and click Continue button" enabled="true">
             <stringProp name="BeanShellSampler.query">
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -231,6 +232,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 // Odwołanie się do obiektu z poprzedniego modułu
 my_driver = vars.getObject(&quot;DRIVER&quot;);
 
+Thread.sleep(1000);
 WebElement emailField = my_driver.findElement(By.id(&quot;usernameOrEmail&quot;));
 emailField.sendKeys(new String[] { &quot;${user}&quot; });
 
@@ -254,8 +256,47 @@ return(&quot;success!&quot;);</stringProp>
             </ResponseAssertion>
             <hashTree/>
           </hashTree>
-          <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="Put the password and click LogIn buttion" enabled="true">
+          <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="Check if there is any error &quot;User does not exist.&quot;" enabled="true">
             <stringProp name="BeanShellSampler.query">
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+// Odwołanie się do obiektu z poprzedniego modułu
+my_driver = vars.getObject(&quot;DRIVER&quot;);
+
+Thread.sleep(1000);
+
+Boolean isPresent = my_driver.findElements(By.xpath(&quot;//div[@id=&apos;primary&apos;]/div/main/div/div[1]/div/form/div[1]/div[1]/div[1]/span&quot;)).size() &gt; 0;
+
+if (!isPresent) { vars.put(&quot;userExists&quot;,&quot;YES&quot;); }
+else { vars.put(&quot;userExists&quot;,&quot;NO&quot;); }
+	
+</stringProp>
+            <stringProp name="BeanShellSampler.filename"></stringProp>
+            <stringProp name="BeanShellSampler.parameters"></stringProp>
+            <boolProp name="BeanShellSampler.resetInterpreter">false</boolProp>
+          </BeanShellSampler>
+          <hashTree>
+            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="false">
+              <collectionProp name="Asserion.test_strings">
+                <stringProp name="-1867169789">success</stringProp>
+              </collectionProp>
+              <stringProp name="Assertion.custom_message"></stringProp>
+              <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+              <boolProp name="Assertion.assume_success">false</boolProp>
+              <intProp name="Assertion.test_type">16</intProp>
+            </ResponseAssertion>
+            <hashTree/>
+          </hashTree>
+          <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If user exists" enabled="true">
+            <stringProp name="IfController.condition">&quot;${userExists}&quot; == &quot;YES&quot;</stringProp>
+            <boolProp name="IfController.evaluateAll">false</boolProp>
+          </IfController>
+          <hashTree>
+            <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="Put the password and click LogIn buttion" enabled="true">
+              <stringProp name="BeanShellSampler.query">
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -268,36 +309,140 @@ import java.io.File;
 // Odwołanie się do obiektu z poprzedniego modułu
 my_driver = vars.getObject(&quot;DRIVER&quot;);
 
-Thread.sleep(1000);
+Thread.sleep(2500);
 WebElement passwordField = my_driver.findElement(By.id(&quot;password&quot;));
 passwordField.sendKeys(new String[] { &quot;${pass}&quot; });
 
 WebElement loginButton = my_driver.findElement(By.xpath(&quot;//div[@id=&apos;primary&apos;]/div/main/div/div[1]/div/form/div[1]/div[2]/button&quot;));
 loginButton.click();
 
-try {
-	WebElement mySiteLink = my_driver.findElement(By.xpath(&quot;//*[@id=&apos;header&apos;]/a[1]&quot;));
-} catch (Exception e) {
-	throw(e);
-}
-
-
 return(&quot;success!&quot;);</stringProp>
-            <stringProp name="BeanShellSampler.filename"></stringProp>
-            <stringProp name="BeanShellSampler.parameters"></stringProp>
-            <boolProp name="BeanShellSampler.resetInterpreter">false</boolProp>
-          </BeanShellSampler>
+              <stringProp name="BeanShellSampler.filename"></stringProp>
+              <stringProp name="BeanShellSampler.parameters"></stringProp>
+              <boolProp name="BeanShellSampler.resetInterpreter">false</boolProp>
+            </BeanShellSampler>
+            <hashTree>
+              <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+                <collectionProp name="Asserion.test_strings">
+                  <stringProp name="-1867169789">success</stringProp>
+                </collectionProp>
+                <stringProp name="Assertion.custom_message"></stringProp>
+                <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+                <boolProp name="Assertion.assume_success">false</boolProp>
+                <intProp name="Assertion.test_type">16</intProp>
+              </ResponseAssertion>
+              <hashTree/>
+            </hashTree>
+            <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="Check if there is any error &quot;Oops, that&apos;s not the right password. Please try again!&quot;" enabled="true">
+              <stringProp name="BeanShellSampler.query">
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+// Odwołanie się do obiektu z poprzedniego modułu
+my_driver = vars.getObject(&quot;DRIVER&quot;);
+
+Thread.sleep(1000);
+
+Boolean isPresent = my_driver.findElements(By.xpath(&quot;//div[@id=&apos;primary&apos;]/div/main/div/div[1]/div/form/div[1]/div[1]/div/div[2]/span&quot;)).size() &gt; 0;
+
+if (!isPresent) { vars.put(&quot;passExists&quot;,&quot;YES&quot;); }
+else { vars.put(&quot;passExists&quot;,&quot;NO&quot;); }
+	
+</stringProp>
+              <stringProp name="BeanShellSampler.filename"></stringProp>
+              <stringProp name="BeanShellSampler.parameters"></stringProp>
+              <boolProp name="BeanShellSampler.resetInterpreter">false</boolProp>
+            </BeanShellSampler>
+            <hashTree>
+              <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="false">
+                <collectionProp name="Asserion.test_strings">
+                  <stringProp name="-1867169789">success</stringProp>
+                </collectionProp>
+                <stringProp name="Assertion.custom_message"></stringProp>
+                <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+                <boolProp name="Assertion.assume_success">false</boolProp>
+                <intProp name="Assertion.test_type">16</intProp>
+              </ResponseAssertion>
+              <hashTree/>
+            </hashTree>
+            <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If password is not correct" enabled="true">
+              <stringProp name="IfController.condition">&quot;${passExists}&quot; == &quot;NO&quot;</stringProp>
+              <boolProp name="IfController.evaluateAll">false</boolProp>
+            </IfController>
+            <hashTree>
+              <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="&quot;Oops, that&apos;s not the right password. Please try again!&quot;" enabled="true">
+                <stringProp name="BeanShellSampler.query">
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+// Odwołanie się do obiektu z poprzedniego modułu
+my_driver = vars.getObject(&quot;DRIVER&quot;);
+
+Thread.sleep(1000);
+
+String passError = my_driver.findElement(By.xpath(&quot;//div[@id=&apos;primary&apos;]/div/main/div/div[1]/div/form/div[1]/div[1]/div/div[2]/span&quot;)).getText();
+
+return(passError);
+	</stringProp>
+                <stringProp name="BeanShellSampler.filename"></stringProp>
+                <stringProp name="BeanShellSampler.parameters"></stringProp>
+                <boolProp name="BeanShellSampler.resetInterpreter">false</boolProp>
+              </BeanShellSampler>
+              <hashTree>
+                <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+                  <collectionProp name="Asserion.test_strings">
+                    <stringProp name="1367275289">Oops, that&apos;s not the right password. Please try again!</stringProp>
+                  </collectionProp>
+                  <stringProp name="Assertion.custom_message"></stringProp>
+                  <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+                  <boolProp name="Assertion.assume_success">false</boolProp>
+                  <intProp name="Assertion.test_type">16</intProp>
+                </ResponseAssertion>
+                <hashTree/>
+              </hashTree>
+            </hashTree>
+          </hashTree>
+          <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If user does not exist" enabled="true">
+            <stringProp name="IfController.condition">&quot;${userExists}&quot; == &quot;NO&quot;</stringProp>
+            <boolProp name="IfController.evaluateAll">false</boolProp>
+          </IfController>
           <hashTree>
-            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-              <collectionProp name="Asserion.test_strings">
-                <stringProp name="-1867169789">success</stringProp>
-              </collectionProp>
-              <stringProp name="Assertion.custom_message"></stringProp>
-              <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-              <boolProp name="Assertion.assume_success">false</boolProp>
-              <intProp name="Assertion.test_type">16</intProp>
-            </ResponseAssertion>
-            <hashTree/>
+            <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="&quot;User does not exist.&quot;" enabled="true">
+              <stringProp name="BeanShellSampler.query">
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+// Odwołanie się do obiektu z poprzedniego modułu
+my_driver = vars.getObject(&quot;DRIVER&quot;);
+
+Thread.sleep(1000);
+
+String userError = my_driver.findElement(By.xpath(&quot;//div[@id=&apos;primary&apos;]/div/main/div/div[1]/div/form/div[1]/div[1]/div[1]/span&quot;)).getText();
+
+return(userError);
+	</stringProp>
+              <stringProp name="BeanShellSampler.filename"></stringProp>
+              <stringProp name="BeanShellSampler.parameters"></stringProp>
+              <boolProp name="BeanShellSampler.resetInterpreter">false</boolProp>
+            </BeanShellSampler>
+            <hashTree>
+              <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+                <collectionProp name="Asserion.test_strings">
+                  <stringProp name="-824544298">User does not exist.</stringProp>
+                </collectionProp>
+                <stringProp name="Assertion.custom_message"></stringProp>
+                <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+                <boolProp name="Assertion.assume_success">false</boolProp>
+                <intProp name="Assertion.test_type">16</intProp>
+              </ResponseAssertion>
+              <hashTree/>
+            </hashTree>
           </hashTree>
         </hashTree>
         <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="LOGOUT" enabled="true"/>
@@ -370,6 +515,20 @@ return(&quot;success&quot;);</stringProp>
         </hashTree>
         <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="ADD_COMMENT" enabled="true"/>
         <hashTree>
+          <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="Split multivarialbe parameter: comment, email and signature" enabled="true">
+            <stringProp name="BeanShellSampler.query">
+import java.util.StringTokenizer;
+
+StringTokenizer st = new StringTokenizer(&quot;${current_value}&quot;,&quot;:&quot;);
+
+vars.put(&quot;comment&quot;,st.nextElement());
+vars.put(&quot;email&quot;,st.nextElement());
+vars.put(&quot;signature&quot;,st.nextElement());</stringProp>
+            <stringProp name="BeanShellSampler.filename"></stringProp>
+            <stringProp name="BeanShellSampler.parameters"></stringProp>
+            <boolProp name="BeanShellSampler.resetInterpreter">false</boolProp>
+          </BeanShellSampler>
+          <hashTree/>
           <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="Go to comments page under the post" enabled="true">
             <stringProp name="BeanShellSampler.query">
 import org.openqa.selenium.By;
@@ -386,16 +545,15 @@ WebElement commentLink = my_driver.findElement(By.xpath(&quot;//article[contains
 commentLink.click();
 
 WebElement commentArea = my_driver.findElement(By.xpath(&quot;//textarea[@id=&apos;comment&apos;]&quot;));
-commentArea.sendKeys(new String[] { &quot;${current_value}&quot; });
+commentArea.sendKeys(new String[] { &quot;${comment}&quot; });
 
 Thread.sleep(3000);
 WebElement emailArea = my_driver.findElement(By.xpath(&quot;//input[@id=&apos;email&apos;]&quot;));
-emailArea.sendKeys(new String[] { &quot;matematyka-podst@wp.pl&quot; });
+emailArea.sendKeys(new String[] { &quot;${email}&quot; });
 
 WebElement authorArea = my_driver.findElement(By.id(&quot;author&quot;));
-authorArea.sendKeys(new String[] { &quot;Autor&quot; });
-
-Thread.sleep(100);
+if (&quot;${signature}&quot;.equals(&quot;noSignature&quot;)) {authorArea.sendKeys(new String[] { &quot;&quot; });}
+else {authorArea.sendKeys(new String[] { &quot;${signature}&quot; });}
 
 return(&quot;success&quot;);</stringProp>
             <stringProp name="BeanShellSampler.filename"></stringProp>
@@ -423,6 +581,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 
 my_driver = vars.getObject(&quot;DRIVER&quot;);
 
+Thread.sleep(1000);
 WebElement commentSubmitButton = my_driver.findElement(By.id(&quot;comment-submit&quot;));
 commentSubmitButton.click();
 
@@ -443,8 +602,126 @@ return(&quot;success&quot;);</stringProp>
             </ResponseAssertion>
             <hashTree/>
           </hashTree>
-          <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="Login to account to submit" enabled="true">
+          <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="Check if there is any error &quot;Nieprawidłowy adres email&quot;" enabled="true">
             <stringProp name="BeanShellSampler.query">
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+// Odwołanie się do obiektu z poprzedniego modułu
+my_driver = vars.getObject(&quot;DRIVER&quot;);
+
+Thread.sleep(1000);
+
+Boolean isPresent = my_driver.findElements(By.xpath(&quot;//div[@id=&apos;comment-form-guest&apos;]/div/div[2]/div[1]/label/span&quot;)).size() &gt; 0;
+
+if (isPresent) { vars.put(&quot;errorExists&quot;,&quot;YES&quot;); }
+else { vars.put(&quot;errorExists&quot;,&quot;NO&quot;); }
+
+return(isPresent);
+	
+</stringProp>
+            <stringProp name="BeanShellSampler.filename"></stringProp>
+            <stringProp name="BeanShellSampler.parameters"></stringProp>
+            <boolProp name="BeanShellSampler.resetInterpreter">false</boolProp>
+          </BeanShellSampler>
+          <hashTree>
+            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="false">
+              <collectionProp name="Asserion.test_strings">
+                <stringProp name="-1867169789">success</stringProp>
+              </collectionProp>
+              <stringProp name="Assertion.custom_message"></stringProp>
+              <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+              <boolProp name="Assertion.assume_success">false</boolProp>
+              <intProp name="Assertion.test_type">16</intProp>
+            </ResponseAssertion>
+            <hashTree/>
+          </hashTree>
+          <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="Check if there is any error &quot;Wprowadź tutaj swoje imię&quot;" enabled="true">
+            <stringProp name="BeanShellSampler.query">
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+// Odwołanie się do obiektu z poprzedniego modułu
+my_driver = vars.getObject(&quot;DRIVER&quot;);
+
+Thread.sleep(1000);
+
+Boolean isPresent = my_driver.findElements(By.xpath(&quot;//div[@id=&apos;comment-form-guest&apos;]/div/div[2]/div[2]/label&quot;)).size() &gt; 0;
+
+if (isPresent) { vars.put(&quot;signErrorExists&quot;,&quot;YES&quot;); }
+else { vars.put(&quot;signErrorExists&quot;,&quot;NO&quot;); }
+	
+</stringProp>
+            <stringProp name="BeanShellSampler.filename"></stringProp>
+            <stringProp name="BeanShellSampler.parameters"></stringProp>
+            <boolProp name="BeanShellSampler.resetInterpreter">false</boolProp>
+          </BeanShellSampler>
+          <hashTree>
+            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="false">
+              <collectionProp name="Asserion.test_strings">
+                <stringProp name="-1867169789">success</stringProp>
+              </collectionProp>
+              <stringProp name="Assertion.custom_message"></stringProp>
+              <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+              <boolProp name="Assertion.assume_success">false</boolProp>
+              <intProp name="Assertion.test_type">16</intProp>
+            </ResponseAssertion>
+            <hashTree/>
+          </hashTree>
+          <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If any error appears" enabled="true">
+            <stringProp name="IfController.condition">&quot;${errorExists}&quot; == &quot;YES&quot; || &quot;${signErrorExists}&quot; == &quot;YES&quot;</stringProp>
+            <boolProp name="IfController.evaluateAll">false</boolProp>
+          </IfController>
+          <hashTree>
+            <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="&quot;Nieprawidłowy adres email&quot; or &quot;Wprowadź tutaj swoje imię&quot;" enabled="true">
+              <stringProp name="BeanShellSampler.query">
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+// Odwołanie się do obiektu z poprzedniego modułu
+my_driver = vars.getObject(&quot;DRIVER&quot;);
+
+Thread.sleep(1000);
+
+if (&quot;${errorExists}&quot; == &quot;YES&quot;) {
+	String commentError = my_driver.findElement(By.xpath(&quot;//div[@id=&apos;comment-form-guest&apos;]/div/div[2]/div[1]/label/span&quot;)).getText();
+} else if (&quot;${signErrorExists}&quot; == &quot;YES&quot;) {
+		String commentSignError = my_driver.findElement(By.xpath(&quot;//div[@id=&apos;comment-form-guest&apos;]/div/div[2]/div[2]/label&quot;)).getText();
+}
+
+return(commentError + &quot; plus &quot; + commentSignError);
+	</stringProp>
+              <stringProp name="BeanShellSampler.filename"></stringProp>
+              <stringProp name="BeanShellSampler.parameters"></stringProp>
+              <boolProp name="BeanShellSampler.resetInterpreter">false</boolProp>
+            </BeanShellSampler>
+            <hashTree>
+              <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+                <collectionProp name="Asserion.test_strings">
+                  <stringProp name="428558597">Nieprawidłowy adres email</stringProp>
+                  <stringProp name="-360386820">Wprowadź tutaj swoje imię</stringProp>
+                </collectionProp>
+                <stringProp name="Assertion.custom_message"></stringProp>
+                <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+                <boolProp name="Assertion.assume_success">false</boolProp>
+                <intProp name="Assertion.test_type">40</intProp>
+              </ResponseAssertion>
+              <hashTree/>
+            </hashTree>
+          </hashTree>
+          <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If errors do not appear" enabled="true">
+            <stringProp name="IfController.condition">&quot;${errorExists}&quot; == &quot;NO&quot; &amp;&amp; &quot;${signErrorExists}&quot; == &quot;YES&quot;</stringProp>
+            <boolProp name="IfController.evaluateAll">false</boolProp>
+          </IfController>
+          <hashTree>
+            <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="Login to account to submit" enabled="true">
+              <stringProp name="BeanShellSampler.query">
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -461,21 +738,22 @@ confirmButton.click();
 Thread.sleep(3000);
 
 return(&quot;success&quot;);</stringProp>
-            <stringProp name="BeanShellSampler.filename"></stringProp>
-            <stringProp name="BeanShellSampler.parameters"></stringProp>
-            <boolProp name="BeanShellSampler.resetInterpreter">false</boolProp>
-          </BeanShellSampler>
-          <hashTree>
-            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-              <collectionProp name="Asserion.test_strings">
-                <stringProp name="-1867169789">success</stringProp>
-              </collectionProp>
-              <stringProp name="Assertion.custom_message"></stringProp>
-              <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-              <boolProp name="Assertion.assume_success">false</boolProp>
-              <intProp name="Assertion.test_type">16</intProp>
-            </ResponseAssertion>
-            <hashTree/>
+              <stringProp name="BeanShellSampler.filename"></stringProp>
+              <stringProp name="BeanShellSampler.parameters"></stringProp>
+              <boolProp name="BeanShellSampler.resetInterpreter">false</boolProp>
+            </BeanShellSampler>
+            <hashTree>
+              <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+                <collectionProp name="Asserion.test_strings">
+                  <stringProp name="-1867169789">success</stringProp>
+                </collectionProp>
+                <stringProp name="Assertion.custom_message"></stringProp>
+                <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+                <boolProp name="Assertion.assume_success">false</boolProp>
+                <intProp name="Assertion.test_type">16</intProp>
+              </ResponseAssertion>
+              <hashTree/>
+            </hashTree>
           </hashTree>
         </hashTree>
         <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="ADD_POST" enabled="true"/>
@@ -1592,6 +1870,42 @@ return ${__intSum(${current},1,current)};</stringProp>
         </ResultCollector>
         <hashTree/>
       </hashTree>
+      <ResultCollector guiclass="GraphVisualizer" testclass="ResultCollector" testname="Graph Results" enabled="true">
+        <boolProp name="ResultCollector.error_logging">false</boolProp>
+        <objProp>
+          <name>saveConfig</name>
+          <value class="SampleSaveConfiguration">
+            <time>true</time>
+            <latency>true</latency>
+            <timestamp>true</timestamp>
+            <success>true</success>
+            <label>true</label>
+            <code>true</code>
+            <message>true</message>
+            <threadName>true</threadName>
+            <dataType>true</dataType>
+            <encoding>false</encoding>
+            <assertions>true</assertions>
+            <subresults>true</subresults>
+            <responseData>false</responseData>
+            <samplerData>false</samplerData>
+            <xml>false</xml>
+            <fieldNames>true</fieldNames>
+            <responseHeaders>false</responseHeaders>
+            <requestHeaders>false</requestHeaders>
+            <responseDataOnError>false</responseDataOnError>
+            <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+            <assertionsResultsToSave>0</assertionsResultsToSave>
+            <bytes>true</bytes>
+            <sentBytes>true</sentBytes>
+            <threadCounts>true</threadCounts>
+            <idleTime>true</idleTime>
+            <connectTime>true</connectTime>
+          </value>
+        </objProp>
+        <stringProp name="filename"></stringProp>
+      </ResultCollector>
+      <hashTree/>
     </hashTree>
   </hashTree>
 </jmeterTestPlan>

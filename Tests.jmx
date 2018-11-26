@@ -260,6 +260,10 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.apache.commons.io.FileUtils;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
+import java.io.File;
 
 // Odwołanie się do obiektu z poprzedniego modułu
 my_driver = vars.getObject(&quot;DRIVER&quot;);
@@ -270,7 +274,14 @@ passwordField.sendKeys(new String[] { &quot;${pass}&quot; });
 
 WebElement loginButton = my_driver.findElement(By.xpath(&quot;//div[@id=&apos;primary&apos;]/div/main/div/div[1]/div/form/div[1]/div[2]/button&quot;));
 loginButton.click();
-	
+
+try {
+	WebElement mySiteLink = my_driver.findElement(By.xpath(&quot;//*[@id=&apos;header&apos;]/a[1]&quot;));
+} catch (Exception e) {
+	throw(e);
+}
+
+
 return(&quot;success!&quot;);</stringProp>
             <stringProp name="BeanShellSampler.filename"></stringProp>
             <stringProp name="BeanShellSampler.parameters"></stringProp>
@@ -469,7 +480,7 @@ return(&quot;success&quot;);</stringProp>
         </hashTree>
         <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="ADD_POST" enabled="true"/>
         <hashTree>
-          <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="Split multivarialbe parameter" enabled="true">
+          <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="Split multivarialbe parameter" enabled="false">
             <stringProp name="BeanShellSampler.query">
 import java.util.StringTokenizer;
 
@@ -495,13 +506,44 @@ Thread.sleep(1000);
 WebElement postRedirectLink = my_driver.findElement(By.xpath(&quot;//header[@id=&apos;header&apos;]/div[1]/a&quot;));
 postRedirectLink.click();
 
-Thread.sleep(1000);
-WebElement titleArea = my_driver.findElement(By.xpath(&quot;//div[@id=&apos;primary&apos;]/div/div[3]/div[2]/div/div[3]/div[2]/div/textarea&quot;));
-titleArea.sendKeys(&quot;${title}&quot;);
+Thread.sleep(5000);
+WebElement titleArea = my_driver.findElement(By.xpath(&quot;//div[@id=&apos;primary&apos;]/div/div[4]/div[2]/div/div[3]/div[2]/div/textarea&quot;));
+titleArea.sendKeys(new String[] { &quot;${current_value}&quot; });
+
+return(&quot;success&quot;);</stringProp>
+            <stringProp name="BeanShellSampler.filename"></stringProp>
+            <stringProp name="BeanShellSampler.parameters"></stringProp>
+            <boolProp name="BeanShellSampler.resetInterpreter">false</boolProp>
+          </BeanShellSampler>
+          <hashTree>
+            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+              <collectionProp name="Asserion.test_strings">
+                <stringProp name="-1867169789">success</stringProp>
+              </collectionProp>
+              <stringProp name="Assertion.custom_message"></stringProp>
+              <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+              <boolProp name="Assertion.assume_success">false</boolProp>
+              <intProp name="Assertion.test_type">16</intProp>
+            </ResponseAssertion>
+            <hashTree/>
+          </hashTree>
+          <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="Click Publish" enabled="true">
+            <stringProp name="BeanShellSampler.query">
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+my_driver = vars.getObject(&quot;DRIVER&quot;);
 
 Thread.sleep(1000);
-WebElement titleArea = my_driver.findElement(By.id(&quot;tinymce&quot;));
-titleArea.sendKeys(&quot;${text}&quot;);
+WebElement publishButton = my_driver.findElement(By.xpath(&quot;//div[@id=&apos;primary&apos;]/div/div[4]/div[1]/div[4]/div/button&quot;));
+publishButton.click();
+
+Thread.sleep(1000);
+WebElement publishButton2 = my_driver.findElement(By.xpath(&quot;//div[@id=&apos;primary&apos;]/div/div[2]/div/div[1]/div[2]/button&quot;));
+publishButton2.click();
+
 
 return(&quot;success&quot;);</stringProp>
             <stringProp name="BeanShellSampler.filename"></stringProp>
@@ -1057,6 +1099,44 @@ return(&quot;success&quot;);</stringProp>
             <hashTree/>
           </hashTree>
         </hashTree>
+        <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="TAKE_SCREENSHOT" enabled="true"/>
+        <hashTree>
+          <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="Take screenshot of action" enabled="true">
+            <stringProp name="BeanShellSampler.query">
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.apache.commons.io.FileUtils;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
+import java.io.File;
+
+my_driver = vars.getObject(&quot;DRIVER&quot;);
+
+Thread.sleep(1000);
+
+File scrFile = ((TakesScreenshot) my_driver).getScreenshotAs(OutputType.FILE);
+FileUtils.copyFile(scrFile, new File(&quot;C:/mgrProject/${current_value}.png&quot;));
+
+return(&quot;success&quot;);</stringProp>
+            <stringProp name="BeanShellSampler.filename"></stringProp>
+            <stringProp name="BeanShellSampler.parameters"></stringProp>
+            <boolProp name="BeanShellSampler.resetInterpreter">false</boolProp>
+          </BeanShellSampler>
+          <hashTree>
+            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+              <collectionProp name="Asserion.test_strings">
+                <stringProp name="-1867169789">success</stringProp>
+              </collectionProp>
+              <stringProp name="Assertion.custom_message"></stringProp>
+              <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+              <boolProp name="Assertion.assume_success">false</boolProp>
+              <intProp name="Assertion.test_type">16</intProp>
+            </ResponseAssertion>
+            <hashTree/>
+          </hashTree>
+        </hashTree>
       </hashTree>
       <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Test thread" enabled="true">
         <stringProp name="ThreadGroup.on_sample_error">stopthread</stringProp>
@@ -1416,6 +1496,50 @@ print(&quot;Current value: &quot; + value_value);</stringProp>
                     <stringProp name="764597751">Test Plan</stringProp>
                     <stringProp name="634176331">Modules - keep disabled</stringProp>
                     <stringProp name="-460081591">ACCEPT_BUTTON</stringProp>
+                  </collectionProp>
+                </ModuleController>
+                <hashTree/>
+              </hashTree>
+              <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If step = TAKE_SCREENSHOT" enabled="true">
+                <stringProp name="IfController.condition">&quot;${current_step}&quot; == &quot;TAKE_SCREENSHOT&quot;</stringProp>
+                <boolProp name="IfController.evaluateAll">false</boolProp>
+              </IfController>
+              <hashTree>
+                <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="Executing ${current_step} with value ${current_value}" enabled="true">
+                  <stringProp name="BeanShellSampler.query"></stringProp>
+                  <stringProp name="BeanShellSampler.filename"></stringProp>
+                  <stringProp name="BeanShellSampler.parameters"></stringProp>
+                  <boolProp name="BeanShellSampler.resetInterpreter">false</boolProp>
+                </BeanShellSampler>
+                <hashTree/>
+                <ModuleController guiclass="ModuleControllerGui" testclass="ModuleController" testname="Executing ${current_step} with value ${current_value}" enabled="true">
+                  <collectionProp name="ModuleController.node_path">
+                    <stringProp name="764597751">Test Plan</stringProp>
+                    <stringProp name="764597751">Test Plan</stringProp>
+                    <stringProp name="634176331">Modules - keep disabled</stringProp>
+                    <stringProp name="227102750">TAKE_SCREENSHOT</stringProp>
+                  </collectionProp>
+                </ModuleController>
+                <hashTree/>
+              </hashTree>
+              <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If step = ADD_POST" enabled="true">
+                <stringProp name="IfController.condition">&quot;${current_step}&quot; == &quot;ADD_POST&quot;</stringProp>
+                <boolProp name="IfController.evaluateAll">false</boolProp>
+              </IfController>
+              <hashTree>
+                <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="Executing ${current_step} with value ${current_value}" enabled="true">
+                  <stringProp name="BeanShellSampler.query"></stringProp>
+                  <stringProp name="BeanShellSampler.filename"></stringProp>
+                  <stringProp name="BeanShellSampler.parameters"></stringProp>
+                  <boolProp name="BeanShellSampler.resetInterpreter">false</boolProp>
+                </BeanShellSampler>
+                <hashTree/>
+                <ModuleController guiclass="ModuleControllerGui" testclass="ModuleController" testname="Executing ${current_step} with value ${current_value}" enabled="true">
+                  <collectionProp name="ModuleController.node_path">
+                    <stringProp name="764597751">Test Plan</stringProp>
+                    <stringProp name="764597751">Test Plan</stringProp>
+                    <stringProp name="634176331">Modules - keep disabled</stringProp>
+                    <stringProp name="-423758434">ADD_POST</stringProp>
                   </collectionProp>
                 </ModuleController>
                 <hashTree/>
